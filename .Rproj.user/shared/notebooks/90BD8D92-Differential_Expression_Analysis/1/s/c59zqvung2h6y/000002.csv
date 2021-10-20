@@ -1,0 +1,20 @@
+"0",""
+"0","#Check simpler model"
+"0","dds2<-DESeq(dds, test=""LRT"", reduced=~Antibiotic+Time)"
+"2","estimating size factors
+"
+"2","estimating dispersions
+"
+"2","gene-wise dispersion estimates
+"
+"2","mean-dispersion relationship
+"
+"2","final dispersion estimates
+"
+"2","fitting model and testing
+"
+"0","res<-results(dds2, tidy=T)%>%"
+"0","  filter(padj < 0.05)"
+"0",""
+"0","#913 genes out of 3764 genes have a greater increase in the log liklihood than would be expected if the interaction term was 0. That's 24% of the observed genes that the full model may fit better to. Therfore I will continue with the full model. "
+"0",""

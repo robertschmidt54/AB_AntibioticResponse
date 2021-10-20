@@ -1,0 +1,6 @@
+"0","MERRes<-results(dds2, contrast=c(0,1,0,0,0,0,0,0,0,0,0,1,0,0), tidy=T)"
+"0",""
+"0","MERSig<-MERRes%>%filter(padj < 0.05, abs(log2FoldChange) >= 1.5)"
+"0",""
+"0","write_tsv(MERRes, ""../DESeq2Out/ByAntibioticResults/FullResults/MER_FullResults.txt"")"
+"0","write_tsv(MERSig, ""../DESeq2Out/ByAntibioticResults/SignificantResults/MER_SigResults.txt"")"

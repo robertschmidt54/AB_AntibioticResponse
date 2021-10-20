@@ -1,0 +1,657 @@
+"0","sampleData<-read_tsv(""../SampleTable.txt"")%>%"
+"0","  mutate(Time=as.factor(Time), Antibiotic=as.factor(Antibiotic),"
+"0","         group=as.factor(paste(Antibiotic, Time, sep=""_"")))"
+"1","[1m[1mRows: [1m[22m[34m[34m56[34m[39m [1m[1mColumns: [1m[22m[34m[34m5[34m[39m
+"
+"1","[36m--[39m [1m[1mColumn specification[1m[22m [36m------------------------------------------[39m
+[1mDelimiter:[22m ""\t""
+[31mchr[39m (4): Run, FileName, Antibiotic, Sample Name
+[32mdbl[39m (1): Time
+"
+"1","
+[36mi[39m Use [38;5;251m[48;5;235m[38;5;251m[48;5;235m`spec()`[48;5;235m[38;5;251m[49m[39m to retrieve the full column specification for this data.
+[36mi[39m Specify the column types or set [38;5;251m[48;5;235m[38;5;251m[48;5;235m`show_col_types = FALSE`[48;5;235m[38;5;251m[49m[39m to quiet this message.
+"
+"0","sampleData$Antibiotic<-relevel(sampleData$Antibiotic, ref=""NDC"")"
+"0","sampleData$group<-relevel(sampleData$group, ref=""NDC_30"")"
+"0",""
+"0",""
+"0","files<-list.files(""../HTSeqOut/Gene_level/"", full.names = T)"
+"0",""
+"0","ctMat<-map(files, read_tsv, col_names=c(""GeneID"", ""Expression""))%>%"
+"0","  purrr::reduce(full_join, by=""GeneID"")%>%"
+"0","  filter(GeneID != ""__no_feature"",  GeneID != ""__ambiguous"", "
+"0","         GeneID != ""__too_low_aQual"",  GeneID != ""__not_aligned"", "
+"0","         GeneID != ""__alignment_not_unique"")%>%"
+"0","  column_to_rownames(""GeneID"")%>%"
+"0","  as.matrix()"
+"1","[1m[1mRows: [1m[22m[34m[34m3770[34m[39m [1m[1mColumns: [1m[22m[34m[34m2[34m[39m
+"
+"1","[36m--[39m [1m[1mColumn specification[1m[22m [36m------------------------------------------[39m
+[1mDelimiter:[22m ""\t""
+[31mchr[39m (1): GeneID
+[32mdbl[39m (1): Expression
+"
+"1","
+[36mi[39m Use [38;5;251m[48;5;235m[38;5;251m[48;5;235m`spec()`[48;5;235m[38;5;251m[49m[39m to retrieve the full column specification for this data.
+[36mi[39m Specify the column types or set [38;5;251m[48;5;235m[38;5;251m[48;5;235m`show_col_types = FALSE`[48;5;235m[38;5;251m[49m[39m to quiet this message.
+"
+"1","[1m[1mRows: [1m[22m[34m[34m3770[34m[39m [1m[1mColumns: [1m[22m[34m[34m2[34m[39m
+"
+"1","[36m--[39m [1m[1mColumn specification[1m[22m [36m------------------------------------------[39m
+[1mDelimiter:[22m ""\t""
+[31mchr[39m (1): GeneID
+[32mdbl[39m (1): Expression
+"
+"1","
+[36mi[39m Use [38;5;251m[48;5;235m[38;5;251m[48;5;235m`spec()`[48;5;235m[38;5;251m[49m[39m to retrieve the full column specification for this data.
+[36mi[39m Specify the column types or set [38;5;251m[48;5;235m[38;5;251m[48;5;235m`show_col_types = FALSE`[48;5;235m[38;5;251m[49m[39m to quiet this message.
+"
+"1","[1m[1mRows: [1m[22m[34m[34m3770[34m[39m [1m[1mColumns: [1m[22m[34m[34m2[34m[39m
+"
+"1","[36m--[39m [1m[1mColumn specification[1m[22m [36m------------------------------------------[39m
+[1mDelimiter:[22m ""\t""
+[31mchr[39m (1): GeneID
+[32mdbl[39m (1): Expression
+"
+"1","
+[36mi[39m Use [38;5;251m[48;5;235m[38;5;251m[48;5;235m`spec()`[48;5;235m[38;5;251m[49m[39m to retrieve the full column specification for this data.
+[36mi[39m Specify the column types or set [38;5;251m[48;5;235m[38;5;251m[48;5;235m`show_col_types = FALSE`[48;5;235m[38;5;251m[49m[39m to quiet this message.
+"
+"1","[1m[1mRows: [1m[22m[34m[34m3770[34m[39m [1m[1mColumns: [1m[22m[34m[34m2[34m[39m
+"
+"1","[36m--[39m [1m[1mColumn specification[1m[22m [36m------------------------------------------[39m
+[1mDelimiter:[22m ""\t""
+[31mchr[39m (1): GeneID
+[32mdbl[39m (1): Expression
+"
+"1","
+[36mi[39m Use [38;5;251m[48;5;235m[38;5;251m[48;5;235m`spec()`[48;5;235m[38;5;251m[49m[39m to retrieve the full column specification for this data.
+[36mi[39m Specify the column types or set [38;5;251m[48;5;235m[38;5;251m[48;5;235m`show_col_types = FALSE`[48;5;235m[38;5;251m[49m[39m to quiet this message.
+"
+"1","[1m[1mRows: [1m[22m[34m[34m3770[34m[39m [1m[1mColumns: [1m[22m[34m[34m2[34m[39m
+"
+"1","[36m--[39m [1m[1mColumn specification[1m[22m [36m------------------------------------------[39m
+[1mDelimiter:[22m ""\t""
+[31mchr[39m (1): GeneID
+[32mdbl[39m (1): Expression
+"
+"1","
+[36mi[39m Use [38;5;251m[48;5;235m[38;5;251m[48;5;235m`spec()`[48;5;235m[38;5;251m[49m[39m to retrieve the full column specification for this data.
+[36mi[39m Specify the column types or set [38;5;251m[48;5;235m[38;5;251m[48;5;235m`show_col_types = FALSE`[48;5;235m[38;5;251m[49m[39m to quiet this message.
+"
+"1","[1m[1mRows: [1m[22m[34m[34m3770[34m[39m [1m[1mColumns: [1m[22m[34m[34m2[34m[39m
+"
+"1","[36m--[39m [1m[1mColumn specification[1m[22m [36m------------------------------------------[39m
+[1mDelimiter:[22m ""\t""
+[31mchr[39m (1): GeneID
+[32mdbl[39m (1): Expression
+"
+"1","
+[36mi[39m Use [38;5;251m[48;5;235m[38;5;251m[48;5;235m`spec()`[48;5;235m[38;5;251m[49m[39m to retrieve the full column specification for this data.
+[36mi[39m Specify the column types or set [38;5;251m[48;5;235m[38;5;251m[48;5;235m`show_col_types = FALSE`[48;5;235m[38;5;251m[49m[39m to quiet this message.
+"
+"1","[1m[1mRows: [1m[22m[34m[34m3770[34m[39m [1m[1mColumns: [1m[22m[34m[34m2[34m[39m
+"
+"1","[36m--[39m [1m[1mColumn specification[1m[22m [36m------------------------------------------[39m
+[1mDelimiter:[22m ""\t""
+[31mchr[39m (1): GeneID
+[32mdbl[39m (1): Expression
+"
+"1","
+[36mi[39m Use [38;5;251m[48;5;235m[38;5;251m[48;5;235m`spec()`[48;5;235m[38;5;251m[49m[39m to retrieve the full column specification for this data.
+[36mi[39m Specify the column types or set [38;5;251m[48;5;235m[38;5;251m[48;5;235m`show_col_types = FALSE`[48;5;235m[38;5;251m[49m[39m to quiet this message.
+"
+"1","[1m[1mRows: [1m[22m[34m[34m3770[34m[39m [1m[1mColumns: [1m[22m[34m[34m2[34m[39m
+"
+"1","[36m--[39m [1m[1mColumn specification[1m[22m [36m------------------------------------------[39m
+[1mDelimiter:[22m ""\t""
+[31mchr[39m (1): GeneID
+[32mdbl[39m (1): Expression
+"
+"1","
+[36mi[39m Use [38;5;251m[48;5;235m[38;5;251m[48;5;235m`spec()`[48;5;235m[38;5;251m[49m[39m to retrieve the full column specification for this data.
+[36mi[39m Specify the column types or set [38;5;251m[48;5;235m[38;5;251m[48;5;235m`show_col_types = FALSE`[48;5;235m[38;5;251m[49m[39m to quiet this message.
+"
+"1","[1m[1mRows: [1m[22m[34m[34m3770[34m[39m [1m[1mColumns: [1m[22m[34m[34m2[34m[39m
+"
+"1","[36m--[39m [1m[1mColumn specification[1m[22m [36m------------------------------------------[39m
+[1mDelimiter:[22m ""\t""
+[31mchr[39m (1): GeneID
+[32mdbl[39m (1): Expression
+"
+"1","
+[36mi[39m Use [38;5;251m[48;5;235m[38;5;251m[48;5;235m`spec()`[48;5;235m[38;5;251m[49m[39m to retrieve the full column specification for this data.
+[36mi[39m Specify the column types or set [38;5;251m[48;5;235m[38;5;251m[48;5;235m`show_col_types = FALSE`[48;5;235m[38;5;251m[49m[39m to quiet this message.
+"
+"1","[1m[1mRows: [1m[22m[34m[34m3770[34m[39m [1m[1mColumns: [1m[22m[34m[34m2[34m[39m
+"
+"1","[36m--[39m [1m[1mColumn specification[1m[22m [36m------------------------------------------[39m
+[1mDelimiter:[22m ""\t""
+[31mchr[39m (1): GeneID
+[32mdbl[39m (1): Expression
+"
+"1","
+[36mi[39m Use [38;5;251m[48;5;235m[38;5;251m[48;5;235m`spec()`[48;5;235m[38;5;251m[49m[39m to retrieve the full column specification for this data.
+[36mi[39m Specify the column types or set [38;5;251m[48;5;235m[38;5;251m[48;5;235m`show_col_types = FALSE`[48;5;235m[38;5;251m[49m[39m to quiet this message.
+"
+"1","[1m[1mRows: [1m[22m[34m[34m3770[34m[39m [1m[1mColumns: [1m[22m[34m[34m2[34m[39m
+"
+"1","[36m--[39m [1m[1mColumn specification[1m[22m [36m------------------------------------------[39m
+[1mDelimiter:[22m ""\t""
+[31mchr[39m (1): GeneID
+[32mdbl[39m (1): Expression
+"
+"1","
+[36mi[39m Use [38;5;251m[48;5;235m[38;5;251m[48;5;235m`spec()`[48;5;235m[38;5;251m[49m[39m to retrieve the full column specification for this data.
+[36mi[39m Specify the column types or set [38;5;251m[48;5;235m[38;5;251m[48;5;235m`show_col_types = FALSE`[48;5;235m[38;5;251m[49m[39m to quiet this message.
+"
+"1","[1m[1mRows: [1m[22m[34m[34m3770[34m[39m [1m[1mColumns: [1m[22m[34m[34m2[34m[39m
+"
+"1","[36m--[39m [1m[1mColumn specification[1m[22m [36m------------------------------------------[39m
+[1mDelimiter:[22m ""\t""
+[31mchr[39m (1): GeneID
+[32mdbl[39m (1): Expression
+"
+"1","
+[36mi[39m Use [38;5;251m[48;5;235m[38;5;251m[48;5;235m`spec()`[48;5;235m[38;5;251m[49m[39m to retrieve the full column specification for this data.
+[36mi[39m Specify the column types or set [38;5;251m[48;5;235m[38;5;251m[48;5;235m`show_col_types = FALSE`[48;5;235m[38;5;251m[49m[39m to quiet this message.
+"
+"1","[1m[1mRows: [1m[22m[34m[34m3770[34m[39m [1m[1mColumns: [1m[22m[34m[34m2[34m[39m
+"
+"1","[36m--[39m [1m[1mColumn specification[1m[22m [36m------------------------------------------[39m
+[1mDelimiter:[22m ""\t""
+[31mchr[39m (1): GeneID
+[32mdbl[39m (1): Expression
+"
+"1","
+[36mi[39m Use [38;5;251m[48;5;235m[38;5;251m[48;5;235m`spec()`[48;5;235m[38;5;251m[49m[39m to retrieve the full column specification for this data.
+[36mi[39m Specify the column types or set [38;5;251m[48;5;235m[38;5;251m[48;5;235m`show_col_types = FALSE`[48;5;235m[38;5;251m[49m[39m to quiet this message.
+"
+"1","[1m[1mRows: [1m[22m[34m[34m3770[34m[39m [1m[1mColumns: [1m[22m[34m[34m2[34m[39m
+"
+"1","[36m--[39m [1m[1mColumn specification[1m[22m [36m------------------------------------------[39m
+[1mDelimiter:[22m ""\t""
+[31mchr[39m (1): GeneID
+[32mdbl[39m (1): Expression
+"
+"1","
+[36mi[39m Use [38;5;251m[48;5;235m[38;5;251m[48;5;235m`spec()`[48;5;235m[38;5;251m[49m[39m to retrieve the full column specification for this data.
+[36mi[39m Specify the column types or set [38;5;251m[48;5;235m[38;5;251m[48;5;235m`show_col_types = FALSE`[48;5;235m[38;5;251m[49m[39m to quiet this message.
+"
+"1","[1m[1mRows: [1m[22m[34m[34m3770[34m[39m [1m[1mColumns: [1m[22m[34m[34m2[34m[39m
+"
+"1","[36m--[39m [1m[1mColumn specification[1m[22m [36m------------------------------------------[39m
+[1mDelimiter:[22m ""\t""
+[31mchr[39m (1): GeneID
+[32mdbl[39m (1): Expression
+"
+"1","
+[36mi[39m Use [38;5;251m[48;5;235m[38;5;251m[48;5;235m`spec()`[48;5;235m[38;5;251m[49m[39m to retrieve the full column specification for this data.
+[36mi[39m Specify the column types or set [38;5;251m[48;5;235m[38;5;251m[48;5;235m`show_col_types = FALSE`[48;5;235m[38;5;251m[49m[39m to quiet this message.
+"
+"1","[1m[1mRows: [1m[22m[34m[34m3770[34m[39m [1m[1mColumns: [1m[22m[34m[34m2[34m[39m
+"
+"1","[36m--[39m [1m[1mColumn specification[1m[22m [36m------------------------------------------[39m
+[1mDelimiter:[22m ""\t""
+[31mchr[39m (1): GeneID
+[32mdbl[39m (1): Expression
+"
+"1","
+[36mi[39m Use [38;5;251m[48;5;235m[38;5;251m[48;5;235m`spec()`[48;5;235m[38;5;251m[49m[39m to retrieve the full column specification for this data.
+[36mi[39m Specify the column types or set [38;5;251m[48;5;235m[38;5;251m[48;5;235m`show_col_types = FALSE`[48;5;235m[38;5;251m[49m[39m to quiet this message.
+"
+"1","[1m[1mRows: [1m[22m[34m[34m3770[34m[39m [1m[1mColumns: [1m[22m[34m[34m2[34m[39m
+"
+"1","[36m--[39m [1m[1mColumn specification[1m[22m [36m------------------------------------------[39m
+[1mDelimiter:[22m ""\t""
+[31mchr[39m (1): GeneID
+[32mdbl[39m (1): Expression
+"
+"1","
+[36mi[39m Use [38;5;251m[48;5;235m[38;5;251m[48;5;235m`spec()`[48;5;235m[38;5;251m[49m[39m to retrieve the full column specification for this data.
+[36mi[39m Specify the column types or set [38;5;251m[48;5;235m[38;5;251m[48;5;235m`show_col_types = FALSE`[48;5;235m[38;5;251m[49m[39m to quiet this message.
+"
+"1","[1m[1mRows: [1m[22m[34m[34m3770[34m[39m [1m[1mColumns: [1m[22m[34m[34m2[34m[39m
+"
+"1","[36m--[39m [1m[1mColumn specification[1m[22m [36m------------------------------------------[39m
+[1mDelimiter:[22m ""\t""
+[31mchr[39m (1): GeneID
+[32mdbl[39m (1): Expression
+"
+"1","
+[36mi[39m Use [38;5;251m[48;5;235m[38;5;251m[48;5;235m`spec()`[48;5;235m[38;5;251m[49m[39m to retrieve the full column specification for this data.
+[36mi[39m Specify the column types or set [38;5;251m[48;5;235m[38;5;251m[48;5;235m`show_col_types = FALSE`[48;5;235m[38;5;251m[49m[39m to quiet this message.
+"
+"1","[1m[1mRows: [1m[22m[34m[34m3770[34m[39m [1m[1mColumns: [1m[22m[34m[34m2[34m[39m
+"
+"1","[36m--[39m [1m[1mColumn specification[1m[22m [36m------------------------------------------[39m
+[1mDelimiter:[22m ""\t""
+[31mchr[39m (1): GeneID
+[32mdbl[39m (1): Expression
+"
+"1","
+[36mi[39m Use [38;5;251m[48;5;235m[38;5;251m[48;5;235m`spec()`[48;5;235m[38;5;251m[49m[39m to retrieve the full column specification for this data.
+[36mi[39m Specify the column types or set [38;5;251m[48;5;235m[38;5;251m[48;5;235m`show_col_types = FALSE`[48;5;235m[38;5;251m[49m[39m to quiet this message.
+"
+"1","[1m[1mRows: [1m[22m[34m[34m3770[34m[39m [1m[1mColumns: [1m[22m[34m[34m2[34m[39m
+"
+"1","[36m--[39m [1m[1mColumn specification[1m[22m [36m------------------------------------------[39m
+[1mDelimiter:[22m ""\t""
+[31mchr[39m (1): GeneID
+[32mdbl[39m (1): Expression
+"
+"1","
+[36mi[39m Use [38;5;251m[48;5;235m[38;5;251m[48;5;235m`spec()`[48;5;235m[38;5;251m[49m[39m to retrieve the full column specification for this data.
+[36mi[39m Specify the column types or set [38;5;251m[48;5;235m[38;5;251m[48;5;235m`show_col_types = FALSE`[48;5;235m[38;5;251m[49m[39m to quiet this message.
+"
+"1","[1m[1mRows: [1m[22m[34m[34m3770[34m[39m [1m[1mColumns: [1m[22m[34m[34m2[34m[39m
+"
+"1","[36m--[39m [1m[1mColumn specification[1m[22m [36m------------------------------------------[39m
+[1mDelimiter:[22m ""\t""
+[31mchr[39m (1): GeneID
+[32mdbl[39m (1): Expression
+"
+"1","
+[36mi[39m Use [38;5;251m[48;5;235m[38;5;251m[48;5;235m`spec()`[48;5;235m[38;5;251m[49m[39m to retrieve the full column specification for this data.
+[36mi[39m Specify the column types or set [38;5;251m[48;5;235m[38;5;251m[48;5;235m`show_col_types = FALSE`[48;5;235m[38;5;251m[49m[39m to quiet this message.
+"
+"1","[1m[1mRows: [1m[22m[34m[34m3770[34m[39m [1m[1mColumns: [1m[22m[34m[34m2[34m[39m
+"
+"1","[36m--[39m [1m[1mColumn specification[1m[22m [36m------------------------------------------[39m
+[1mDelimiter:[22m ""\t""
+[31mchr[39m (1): GeneID
+[32mdbl[39m (1): Expression
+"
+"1","
+[36mi[39m Use [38;5;251m[48;5;235m[38;5;251m[48;5;235m`spec()`[48;5;235m[38;5;251m[49m[39m to retrieve the full column specification for this data.
+[36mi[39m Specify the column types or set [38;5;251m[48;5;235m[38;5;251m[48;5;235m`show_col_types = FALSE`[48;5;235m[38;5;251m[49m[39m to quiet this message.
+"
+"1","[1m[1mRows: [1m[22m[34m[34m3770[34m[39m [1m[1mColumns: [1m[22m[34m[34m2[34m[39m
+"
+"1","[36m--[39m [1m[1mColumn specification[1m[22m [36m------------------------------------------[39m
+[1mDelimiter:[22m ""\t""
+[31mchr[39m (1): GeneID
+[32mdbl[39m (1): Expression
+"
+"1","
+[36mi[39m Use [38;5;251m[48;5;235m[38;5;251m[48;5;235m`spec()`[48;5;235m[38;5;251m[49m[39m to retrieve the full column specification for this data.
+[36mi[39m Specify the column types or set [38;5;251m[48;5;235m[38;5;251m[48;5;235m`show_col_types = FALSE`[48;5;235m[38;5;251m[49m[39m to quiet this message.
+"
+"1","[1m[1mRows: [1m[22m[34m[34m3770[34m[39m [1m[1mColumns: [1m[22m[34m[34m2[34m[39m
+"
+"1","[36m--[39m [1m[1mColumn specification[1m[22m [36m------------------------------------------[39m
+[1mDelimiter:[22m ""\t""
+[31mchr[39m (1): GeneID
+[32mdbl[39m (1): Expression
+"
+"1","
+[36mi[39m Use [38;5;251m[48;5;235m[38;5;251m[48;5;235m`spec()`[48;5;235m[38;5;251m[49m[39m to retrieve the full column specification for this data.
+[36mi[39m Specify the column types or set [38;5;251m[48;5;235m[38;5;251m[48;5;235m`show_col_types = FALSE`[48;5;235m[38;5;251m[49m[39m to quiet this message.
+"
+"1","[1m[1mRows: [1m[22m[34m[34m3770[34m[39m [1m[1mColumns: [1m[22m[34m[34m2[34m[39m
+"
+"1","[36m--[39m [1m[1mColumn specification[1m[22m [36m------------------------------------------[39m
+[1mDelimiter:[22m ""\t""
+[31mchr[39m (1): GeneID
+[32mdbl[39m (1): Expression
+"
+"1","
+[36mi[39m Use [38;5;251m[48;5;235m[38;5;251m[48;5;235m`spec()`[48;5;235m[38;5;251m[49m[39m to retrieve the full column specification for this data.
+[36mi[39m Specify the column types or set [38;5;251m[48;5;235m[38;5;251m[48;5;235m`show_col_types = FALSE`[48;5;235m[38;5;251m[49m[39m to quiet this message.
+"
+"1","[1m[1mRows: [1m[22m[34m[34m3770[34m[39m [1m[1mColumns: [1m[22m[34m[34m2[34m[39m
+"
+"1","[36m--[39m [1m[1mColumn specification[1m[22m [36m------------------------------------------[39m
+[1mDelimiter:[22m ""\t""
+[31mchr[39m (1): GeneID
+[32mdbl[39m (1): Expression
+"
+"1","
+[36mi[39m Use [38;5;251m[48;5;235m[38;5;251m[48;5;235m`spec()`[48;5;235m[38;5;251m[49m[39m to retrieve the full column specification for this data.
+[36mi[39m Specify the column types or set [38;5;251m[48;5;235m[38;5;251m[48;5;235m`show_col_types = FALSE`[48;5;235m[38;5;251m[49m[39m to quiet this message.
+"
+"1","[1m[1mRows: [1m[22m[34m[34m3770[34m[39m [1m[1mColumns: [1m[22m[34m[34m2[34m[39m
+"
+"1","[36m--[39m [1m[1mColumn specification[1m[22m [36m------------------------------------------[39m
+[1mDelimiter:[22m ""\t""
+[31mchr[39m (1): GeneID
+[32mdbl[39m (1): Expression
+"
+"1","
+[36mi[39m Use [38;5;251m[48;5;235m[38;5;251m[48;5;235m`spec()`[48;5;235m[38;5;251m[49m[39m to retrieve the full column specification for this data.
+[36mi[39m Specify the column types or set [38;5;251m[48;5;235m[38;5;251m[48;5;235m`show_col_types = FALSE`[48;5;235m[38;5;251m[49m[39m to quiet this message.
+"
+"1","[1m[1mRows: [1m[22m[34m[34m3770[34m[39m [1m[1mColumns: [1m[22m[34m[34m2[34m[39m
+"
+"1","[36m--[39m [1m[1mColumn specification[1m[22m [36m------------------------------------------[39m
+[1mDelimiter:[22m ""\t""
+[31mchr[39m (1): GeneID
+[32mdbl[39m (1): Expression
+"
+"1","
+[36mi[39m Use [38;5;251m[48;5;235m[38;5;251m[48;5;235m`spec()`[48;5;235m[38;5;251m[49m[39m to retrieve the full column specification for this data.
+[36mi[39m Specify the column types or set [38;5;251m[48;5;235m[38;5;251m[48;5;235m`show_col_types = FALSE`[48;5;235m[38;5;251m[49m[39m to quiet this message.
+"
+"1","[1m[1mRows: [1m[22m[34m[34m3770[34m[39m [1m[1mColumns: [1m[22m[34m[34m2[34m[39m
+"
+"1","[36m--[39m [1m[1mColumn specification[1m[22m [36m------------------------------------------[39m
+[1mDelimiter:[22m ""\t""
+[31mchr[39m (1): GeneID
+[32mdbl[39m (1): Expression
+"
+"1","
+[36mi[39m Use [38;5;251m[48;5;235m[38;5;251m[48;5;235m`spec()`[48;5;235m[38;5;251m[49m[39m to retrieve the full column specification for this data.
+[36mi[39m Specify the column types or set [38;5;251m[48;5;235m[38;5;251m[48;5;235m`show_col_types = FALSE`[48;5;235m[38;5;251m[49m[39m to quiet this message.
+"
+"1","[1m[1mRows: [1m[22m[34m[34m3770[34m[39m [1m[1mColumns: [1m[22m[34m[34m2[34m[39m
+"
+"1","[36m--[39m [1m[1mColumn specification[1m[22m [36m------------------------------------------[39m
+[1mDelimiter:[22m ""\t""
+[31mchr[39m (1): GeneID
+[32mdbl[39m (1): Expression
+"
+"1","
+[36mi[39m Use [38;5;251m[48;5;235m[38;5;251m[48;5;235m`spec()`[48;5;235m[38;5;251m[49m[39m to retrieve the full column specification for this data.
+[36mi[39m Specify the column types or set [38;5;251m[48;5;235m[38;5;251m[48;5;235m`show_col_types = FALSE`[48;5;235m[38;5;251m[49m[39m to quiet this message.
+"
+"1","[1m[1mRows: [1m[22m[34m[34m3770[34m[39m [1m[1mColumns: [1m[22m[34m[34m2[34m[39m
+"
+"1","[36m--[39m [1m[1mColumn specification[1m[22m [36m------------------------------------------[39m
+[1mDelimiter:[22m ""\t""
+[31mchr[39m (1): GeneID
+[32mdbl[39m (1): Expression
+"
+"1","
+[36mi[39m Use [38;5;251m[48;5;235m[38;5;251m[48;5;235m`spec()`[48;5;235m[38;5;251m[49m[39m to retrieve the full column specification for this data.
+[36mi[39m Specify the column types or set [38;5;251m[48;5;235m[38;5;251m[48;5;235m`show_col_types = FALSE`[48;5;235m[38;5;251m[49m[39m to quiet this message.
+"
+"1","[1m[1mRows: [1m[22m[34m[34m3770[34m[39m [1m[1mColumns: [1m[22m[34m[34m2[34m[39m
+"
+"1","[36m--[39m [1m[1mColumn specification[1m[22m [36m------------------------------------------[39m
+[1mDelimiter:[22m ""\t""
+[31mchr[39m (1): GeneID
+[32mdbl[39m (1): Expression
+"
+"1","
+[36mi[39m Use [38;5;251m[48;5;235m[38;5;251m[48;5;235m`spec()`[48;5;235m[38;5;251m[49m[39m to retrieve the full column specification for this data.
+[36mi[39m Specify the column types or set [38;5;251m[48;5;235m[38;5;251m[48;5;235m`show_col_types = FALSE`[48;5;235m[38;5;251m[49m[39m to quiet this message.
+"
+"1","[1m[1mRows: [1m[22m[34m[34m3770[34m[39m [1m[1mColumns: [1m[22m[34m[34m2[34m[39m
+"
+"1","[36m--[39m [1m[1mColumn specification[1m[22m [36m------------------------------------------[39m
+[1mDelimiter:[22m ""\t""
+[31mchr[39m (1): GeneID
+[32mdbl[39m (1): Expression
+"
+"1","
+[36mi[39m Use [38;5;251m[48;5;235m[38;5;251m[48;5;235m`spec()`[48;5;235m[38;5;251m[49m[39m to retrieve the full column specification for this data.
+[36mi[39m Specify the column types or set [38;5;251m[48;5;235m[38;5;251m[48;5;235m`show_col_types = FALSE`[48;5;235m[38;5;251m[49m[39m to quiet this message.
+"
+"1","[1m[1mRows: [1m[22m[34m[34m3770[34m[39m [1m[1mColumns: [1m[22m[34m[34m2[34m[39m
+"
+"1","[36m--[39m [1m[1mColumn specification[1m[22m [36m------------------------------------------[39m
+[1mDelimiter:[22m ""\t""
+[31mchr[39m (1): GeneID
+[32mdbl[39m (1): Expression
+"
+"1","
+[36mi[39m Use [38;5;251m[48;5;235m[38;5;251m[48;5;235m`spec()`[48;5;235m[38;5;251m[49m[39m to retrieve the full column specification for this data.
+[36mi[39m Specify the column types or set [38;5;251m[48;5;235m[38;5;251m[48;5;235m`show_col_types = FALSE`[48;5;235m[38;5;251m[49m[39m to quiet this message.
+"
+"1","[1m[1mRows: [1m[22m[34m[34m3770[34m[39m [1m[1mColumns: [1m[22m[34m[34m2[34m[39m
+"
+"1","[36m--[39m [1m[1mColumn specification[1m[22m [36m------------------------------------------[39m
+[1mDelimiter:[22m ""\t""
+[31mchr[39m (1): GeneID
+[32mdbl[39m (1): Expression
+"
+"1","
+[36mi[39m Use [38;5;251m[48;5;235m[38;5;251m[48;5;235m`spec()`[48;5;235m[38;5;251m[49m[39m to retrieve the full column specification for this data.
+[36mi[39m Specify the column types or set [38;5;251m[48;5;235m[38;5;251m[48;5;235m`show_col_types = FALSE`[48;5;235m[38;5;251m[49m[39m to quiet this message.
+"
+"1","[1m[1mRows: [1m[22m[34m[34m3770[34m[39m [1m[1mColumns: [1m[22m[34m[34m2[34m[39m
+"
+"1","[36m--[39m [1m[1mColumn specification[1m[22m [36m------------------------------------------[39m
+[1mDelimiter:[22m ""\t""
+[31mchr[39m (1): GeneID
+[32mdbl[39m (1): Expression
+"
+"1","
+[36mi[39m Use [38;5;251m[48;5;235m[38;5;251m[48;5;235m`spec()`[48;5;235m[38;5;251m[49m[39m to retrieve the full column specification for this data.
+[36mi[39m Specify the column types or set [38;5;251m[48;5;235m[38;5;251m[48;5;235m`show_col_types = FALSE`[48;5;235m[38;5;251m[49m[39m to quiet this message.
+"
+"1","[1m[1mRows: [1m[22m[34m[34m3770[34m[39m [1m[1mColumns: [1m[22m[34m[34m2[34m[39m
+"
+"1","[36m--[39m [1m[1mColumn specification[1m[22m [36m------------------------------------------[39m
+[1mDelimiter:[22m ""\t""
+[31mchr[39m (1): GeneID
+[32mdbl[39m (1): Expression
+"
+"1","
+[36mi[39m Use [38;5;251m[48;5;235m[38;5;251m[48;5;235m`spec()`[48;5;235m[38;5;251m[49m[39m to retrieve the full column specification for this data.
+[36mi[39m Specify the column types or set [38;5;251m[48;5;235m[38;5;251m[48;5;235m`show_col_types = FALSE`[48;5;235m[38;5;251m[49m[39m to quiet this message.
+"
+"1","[1m[1mRows: [1m[22m[34m[34m3770[34m[39m [1m[1mColumns: [1m[22m[34m[34m2[34m[39m
+"
+"1","[36m--[39m [1m[1mColumn specification[1m[22m [36m------------------------------------------[39m
+[1mDelimiter:[22m ""\t""
+[31mchr[39m (1): GeneID
+[32mdbl[39m (1): Expression
+"
+"1","
+[36mi[39m Use [38;5;251m[48;5;235m[38;5;251m[48;5;235m`spec()`[48;5;235m[38;5;251m[49m[39m to retrieve the full column specification for this data.
+[36mi[39m Specify the column types or set [38;5;251m[48;5;235m[38;5;251m[48;5;235m`show_col_types = FALSE`[48;5;235m[38;5;251m[49m[39m to quiet this message.
+"
+"1","[1m[1mRows: [1m[22m[34m[34m3770[34m[39m [1m[1mColumns: [1m[22m[34m[34m2[34m[39m
+"
+"1","[36m--[39m [1m[1mColumn specification[1m[22m [36m------------------------------------------[39m
+[1mDelimiter:[22m ""\t""
+[31mchr[39m (1): GeneID
+[32mdbl[39m (1): Expression
+"
+"1","
+[36mi[39m Use [38;5;251m[48;5;235m[38;5;251m[48;5;235m`spec()`[48;5;235m[38;5;251m[49m[39m to retrieve the full column specification for this data.
+[36mi[39m Specify the column types or set [38;5;251m[48;5;235m[38;5;251m[48;5;235m`show_col_types = FALSE`[48;5;235m[38;5;251m[49m[39m to quiet this message.
+"
+"1","[1m[1mRows: [1m[22m[34m[34m3770[34m[39m [1m[1mColumns: [1m[22m[34m[34m2[34m[39m
+"
+"1","[36m--[39m [1m[1mColumn specification[1m[22m [36m------------------------------------------[39m
+[1mDelimiter:[22m ""\t""
+[31mchr[39m (1): GeneID
+[32mdbl[39m (1): Expression
+"
+"1","
+[36mi[39m Use [38;5;251m[48;5;235m[38;5;251m[48;5;235m`spec()`[48;5;235m[38;5;251m[49m[39m to retrieve the full column specification for this data.
+[36mi[39m Specify the column types or set [38;5;251m[48;5;235m[38;5;251m[48;5;235m`show_col_types = FALSE`[48;5;235m[38;5;251m[49m[39m to quiet this message.
+"
+"1","[1m[1mRows: [1m[22m[34m[34m3770[34m[39m [1m[1mColumns: [1m[22m[34m[34m2[34m[39m
+"
+"1","[36m--[39m [1m[1mColumn specification[1m[22m [36m------------------------------------------[39m
+[1mDelimiter:[22m ""\t""
+[31mchr[39m (1): GeneID
+[32mdbl[39m (1): Expression
+"
+"1","
+[36mi[39m Use [38;5;251m[48;5;235m[38;5;251m[48;5;235m`spec()`[48;5;235m[38;5;251m[49m[39m to retrieve the full column specification for this data.
+[36mi[39m Specify the column types or set [38;5;251m[48;5;235m[38;5;251m[48;5;235m`show_col_types = FALSE`[48;5;235m[38;5;251m[49m[39m to quiet this message.
+"
+"1","[1m[1mRows: [1m[22m[34m[34m3770[34m[39m [1m[1mColumns: [1m[22m[34m[34m2[34m[39m
+"
+"1","[36m--[39m [1m[1mColumn specification[1m[22m [36m------------------------------------------[39m
+[1mDelimiter:[22m ""\t""
+[31mchr[39m (1): GeneID
+[32mdbl[39m (1): Expression
+"
+"1","
+[36mi[39m Use [38;5;251m[48;5;235m[38;5;251m[48;5;235m`spec()`[48;5;235m[38;5;251m[49m[39m to retrieve the full column specification for this data.
+[36mi[39m Specify the column types or set [38;5;251m[48;5;235m[38;5;251m[48;5;235m`show_col_types = FALSE`[48;5;235m[38;5;251m[49m[39m to quiet this message.
+"
+"1","[1m[1mRows: [1m[22m[34m[34m3770[34m[39m [1m[1mColumns: [1m[22m[34m[34m2[34m[39m
+"
+"1","[36m--[39m [1m[1mColumn specification[1m[22m [36m------------------------------------------[39m
+[1mDelimiter:[22m ""\t""
+[31mchr[39m (1): GeneID
+[32mdbl[39m (1): Expression
+"
+"1","
+[36mi[39m Use [38;5;251m[48;5;235m[38;5;251m[48;5;235m`spec()`[48;5;235m[38;5;251m[49m[39m to retrieve the full column specification for this data.
+[36mi[39m Specify the column types or set [38;5;251m[48;5;235m[38;5;251m[48;5;235m`show_col_types = FALSE`[48;5;235m[38;5;251m[49m[39m to quiet this message.
+"
+"1","[1m[1mRows: [1m[22m[34m[34m3770[34m[39m [1m[1mColumns: [1m[22m[34m[34m2[34m[39m
+"
+"1","[36m--[39m [1m[1mColumn specification[1m[22m [36m------------------------------------------[39m
+[1mDelimiter:[22m ""\t""
+[31mchr[39m (1): GeneID
+[32mdbl[39m (1): Expression
+"
+"1","
+[36mi[39m Use [38;5;251m[48;5;235m[38;5;251m[48;5;235m`spec()`[48;5;235m[38;5;251m[49m[39m to retrieve the full column specification for this data.
+[36mi[39m Specify the column types or set [38;5;251m[48;5;235m[38;5;251m[48;5;235m`show_col_types = FALSE`[48;5;235m[38;5;251m[49m[39m to quiet this message.
+"
+"1","[1m[1mRows: [1m[22m[34m[34m3770[34m[39m [1m[1mColumns: [1m[22m[34m[34m2[34m[39m
+"
+"1","[36m--[39m [1m[1mColumn specification[1m[22m [36m------------------------------------------[39m
+[1mDelimiter:[22m ""\t""
+[31mchr[39m (1): GeneID
+[32mdbl[39m (1): Expression
+"
+"1","
+[36mi[39m Use [38;5;251m[48;5;235m[38;5;251m[48;5;235m`spec()`[48;5;235m[38;5;251m[49m[39m to retrieve the full column specification for this data.
+[36mi[39m Specify the column types or set [38;5;251m[48;5;235m[38;5;251m[48;5;235m`show_col_types = FALSE`[48;5;235m[38;5;251m[49m[39m to quiet this message.
+"
+"1","[1m[1mRows: [1m[22m[34m[34m3770[34m[39m [1m[1mColumns: [1m[22m[34m[34m2[34m[39m
+"
+"1","[36m--[39m [1m[1mColumn specification[1m[22m [36m------------------------------------------[39m
+[1mDelimiter:[22m ""\t""
+[31mchr[39m (1): GeneID
+[32mdbl[39m (1): Expression
+"
+"1","
+[36mi[39m Use [38;5;251m[48;5;235m[38;5;251m[48;5;235m`spec()`[48;5;235m[38;5;251m[49m[39m to retrieve the full column specification for this data.
+[36mi[39m Specify the column types or set [38;5;251m[48;5;235m[38;5;251m[48;5;235m`show_col_types = FALSE`[48;5;235m[38;5;251m[49m[39m to quiet this message.
+"
+"1","[1m[1mRows: [1m[22m[34m[34m3770[34m[39m [1m[1mColumns: [1m[22m[34m[34m2[34m[39m
+"
+"1","[36m--[39m [1m[1mColumn specification[1m[22m [36m------------------------------------------[39m
+[1mDelimiter:[22m ""\t""
+[31mchr[39m (1): GeneID
+[32mdbl[39m (1): Expression
+"
+"1","
+[36mi[39m Use [38;5;251m[48;5;235m[38;5;251m[48;5;235m`spec()`[48;5;235m[38;5;251m[49m[39m to retrieve the full column specification for this data.
+[36mi[39m Specify the column types or set [38;5;251m[48;5;235m[38;5;251m[48;5;235m`show_col_types = FALSE`[48;5;235m[38;5;251m[49m[39m to quiet this message.
+"
+"1","[1m[1mRows: [1m[22m[34m[34m3770[34m[39m [1m[1mColumns: [1m[22m[34m[34m2[34m[39m
+"
+"1","[36m--[39m [1m[1mColumn specification[1m[22m [36m------------------------------------------[39m
+[1mDelimiter:[22m ""\t""
+[31mchr[39m (1): GeneID
+[32mdbl[39m (1): Expression
+"
+"1","
+[36mi[39m Use [38;5;251m[48;5;235m[38;5;251m[48;5;235m`spec()`[48;5;235m[38;5;251m[49m[39m to retrieve the full column specification for this data.
+[36mi[39m Specify the column types or set [38;5;251m[48;5;235m[38;5;251m[48;5;235m`show_col_types = FALSE`[48;5;235m[38;5;251m[49m[39m to quiet this message.
+"
+"1","[1m[1mRows: [1m[22m[34m[34m3770[34m[39m [1m[1mColumns: [1m[22m[34m[34m2[34m[39m
+"
+"1","[36m--[39m [1m[1mColumn specification[1m[22m [36m------------------------------------------[39m
+[1mDelimiter:[22m ""\t""
+[31mchr[39m (1): GeneID
+[32mdbl[39m (1): Expression
+"
+"1","
+[36mi[39m Use [38;5;251m[48;5;235m[38;5;251m[48;5;235m`spec()`[48;5;235m[38;5;251m[49m[39m to retrieve the full column specification for this data.
+[36mi[39m Specify the column types or set [38;5;251m[48;5;235m[38;5;251m[48;5;235m`show_col_types = FALSE`[48;5;235m[38;5;251m[49m[39m to quiet this message.
+"
+"1","[1m[1mRows: [1m[22m[34m[34m3770[34m[39m [1m[1mColumns: [1m[22m[34m[34m2[34m[39m
+"
+"1","[36m--[39m [1m[1mColumn specification[1m[22m [36m------------------------------------------[39m
+[1mDelimiter:[22m ""\t""
+[31mchr[39m (1): GeneID
+[32mdbl[39m (1): Expression
+"
+"1","
+[36mi[39m Use [38;5;251m[48;5;235m[38;5;251m[48;5;235m`spec()`[48;5;235m[38;5;251m[49m[39m to retrieve the full column specification for this data.
+[36mi[39m Specify the column types or set [38;5;251m[48;5;235m[38;5;251m[48;5;235m`show_col_types = FALSE`[48;5;235m[38;5;251m[49m[39m to quiet this message.
+"
+"1","[1m[1mRows: [1m[22m[34m[34m3770[34m[39m [1m[1mColumns: [1m[22m[34m[34m2[34m[39m
+"
+"1","[36m--[39m [1m[1mColumn specification[1m[22m [36m------------------------------------------[39m
+[1mDelimiter:[22m ""\t""
+[31mchr[39m (1): GeneID
+[32mdbl[39m (1): Expression
+"
+"1","
+[36mi[39m Use [38;5;251m[48;5;235m[38;5;251m[48;5;235m`spec()`[48;5;235m[38;5;251m[49m[39m to retrieve the full column specification for this data.
+[36mi[39m Specify the column types or set [38;5;251m[48;5;235m[38;5;251m[48;5;235m`show_col_types = FALSE`[48;5;235m[38;5;251m[49m[39m to quiet this message.
+"
+"1","[1m[1mRows: [1m[22m[34m[34m3770[34m[39m [1m[1mColumns: [1m[22m[34m[34m2[34m[39m
+"
+"1","[36m--[39m [1m[1mColumn specification[1m[22m [36m------------------------------------------[39m
+[1mDelimiter:[22m ""\t""
+[31mchr[39m (1): GeneID
+[32mdbl[39m (1): Expression
+"
+"1","
+[36mi[39m Use [38;5;251m[48;5;235m[38;5;251m[48;5;235m`spec()`[48;5;235m[38;5;251m[49m[39m to retrieve the full column specification for this data.
+[36mi[39m Specify the column types or set [38;5;251m[48;5;235m[38;5;251m[48;5;235m`show_col_types = FALSE`[48;5;235m[38;5;251m[49m[39m to quiet this message.
+"
+"1","[1m[1mRows: [1m[22m[34m[34m3770[34m[39m [1m[1mColumns: [1m[22m[34m[34m2[34m[39m
+"
+"1","[36m--[39m [1m[1mColumn specification[1m[22m [36m------------------------------------------[39m
+[1mDelimiter:[22m ""\t""
+[31mchr[39m (1): GeneID
+[32mdbl[39m (1): Expression
+"
+"1","
+[36mi[39m Use [38;5;251m[48;5;235m[38;5;251m[48;5;235m`spec()`[48;5;235m[38;5;251m[49m[39m to retrieve the full column specification for this data.
+[36mi[39m Specify the column types or set [38;5;251m[48;5;235m[38;5;251m[48;5;235m`show_col_types = FALSE`[48;5;235m[38;5;251m[49m[39m to quiet this message.
+"
+"1","[1m[1mRows: [1m[22m[34m[34m3770[34m[39m [1m[1mColumns: [1m[22m[34m[34m2[34m[39m
+"
+"1","[36m--[39m [1m[1mColumn specification[1m[22m [36m------------------------------------------[39m
+[1mDelimiter:[22m ""\t""
+[31mchr[39m (1): GeneID
+[32mdbl[39m (1): Expression
+"
+"1","
+[36mi[39m Use [38;5;251m[48;5;235m[38;5;251m[48;5;235m`spec()`[48;5;235m[38;5;251m[49m[39m to retrieve the full column specification for this data.
+[36mi[39m Specify the column types or set [38;5;251m[48;5;235m[38;5;251m[48;5;235m`show_col_types = FALSE`[48;5;235m[38;5;251m[49m[39m to quiet this message.
+"
+"1","[1m[1mRows: [1m[22m[34m[34m3770[34m[39m [1m[1mColumns: [1m[22m[34m[34m2[34m[39m
+"
+"1","[36m--[39m [1m[1mColumn specification[1m[22m [36m------------------------------------------[39m
+[1mDelimiter:[22m ""\t""
+[31mchr[39m (1): GeneID
+[32mdbl[39m (1): Expression
+"
+"1","
+[36mi[39m Use [38;5;251m[48;5;235m[38;5;251m[48;5;235m`spec()`[48;5;235m[38;5;251m[49m[39m to retrieve the full column specification for this data.
+[36mi[39m Specify the column types or set [38;5;251m[48;5;235m[38;5;251m[48;5;235m`show_col_types = FALSE`[48;5;235m[38;5;251m[49m[39m to quiet this message.
+"
+"1","[1m[1mRows: [1m[22m[34m[34m3770[34m[39m [1m[1mColumns: [1m[22m[34m[34m2[34m[39m
+"
+"1","[36m--[39m [1m[1mColumn specification[1m[22m [36m------------------------------------------[39m
+[1mDelimiter:[22m ""\t""
+[31mchr[39m (1): GeneID
+[32mdbl[39m (1): Expression
+"
+"1","
+[36mi[39m Use [38;5;251m[48;5;235m[38;5;251m[48;5;235m`spec()`[48;5;235m[38;5;251m[49m[39m to retrieve the full column specification for this data.
+[36mi[39m Specify the column types or set [38;5;251m[48;5;235m[38;5;251m[48;5;235m`show_col_types = FALSE`[48;5;235m[38;5;251m[49m[39m to quiet this message.
+"
+"0","colnames(ctMat)<-sampleData$Run"
+"0",""
+"0","dds<-DESeqDataSetFromMatrix(ctMat, sampleData, design=~Time*Antibiotic)"
+"2","converting counts to integer mode
+"
+"0","normCts<-counts(dds, normalized=F)%>%"
+"0","  rlog()"
+"2","rlog() may take a long time with 50 or more samples,
+vst() is a much faster transformation
+"
+"0","normCts_long<-normCts%>%"
+"0","  as.data.frame()%>%"
+"0","  rownames_to_column(""GeneID"")%>%"
+"0","  pivot_longer(-GeneID, names_to=""Sample"", values_to=""NormCounts"")"

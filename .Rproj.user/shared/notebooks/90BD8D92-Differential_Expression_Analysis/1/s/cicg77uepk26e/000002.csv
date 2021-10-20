@@ -1,0 +1,6 @@
+"0","MOXRes<-results(dds2, contrast=c(0,1,0,0,0,0,0,0,0,0,0,0,1,0), tidy=T)"
+"0",""
+"0","MOXSig<-MOXRes%>%filter(padj < 0.05, abs(log2FoldChange) >= 1.5)"
+"0",""
+"0","write_tsv(MOXRes, ""../DESeq2Out/ByAntibioticResults/FullResults/MOX_FullResults.txt"")"
+"0","write_tsv(MOXSig, ""../DESeq2Out/ByAntibioticResults/SignificantResults/MOX_SigResults.txt"")"

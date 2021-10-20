@@ -1,0 +1,5 @@
+"0","normCts<-counts(dds, normalized=T)#%>%
+"
+"2","Error in .local(object, ...) : 
+  first calculate size factors, add normalizationFactors, or set normalized=FALSE
+"

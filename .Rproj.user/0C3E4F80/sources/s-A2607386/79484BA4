@@ -1,0 +1,29 @@
+{
+    "id": "79484BA4",
+    "path": "C:/Users/zenak/Desktop/AB_AntibioticResistance/Scripts/Differential_Expression_Analysis.Rmd",
+    "project_path": "Scripts/Differential_Expression_Analysis.Rmd",
+    "type": "r_markdown",
+    "hash": "0",
+    "contents": "",
+    "dirty": false,
+    "created": 1631243690292.0,
+    "source_on_save": false,
+    "relative_order": 1,
+    "properties": {
+        "tempName": "Untitled1",
+        "chunk_output_type": "inline",
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "296,50",
+        "scrollLine": "0",
+        "last_setup_crc32": ""
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1634599434,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1634599434701,
+    "read_only": false,
+    "read_only_alternatives": []
+}

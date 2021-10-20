@@ -1,0 +1,25 @@
+library(tidyverse)
+library(DESeq2)
+
+sampleTable<-read_tsv("SampleTable.txt")%>%
+  mutate(Time=as.factor(Time))%>%
+  mutate(Antibiotic=fct_relevel(Antibiotic, "NDC"))
+
+dds<-DESeqDataSetFromHTSeqCount(sampleTable=as.data.frame(sampleTable), directory="HTSeqOut", design=~Time*Antibiotic)
+
+keep <- rowSums(counts(dds))>=10
+dds<-dds[keep,]
+
+dds2<-DESeq(dds)
+
+plotDispEsts(dds2)
+plotMA(dds2)
+
+resultsNames(dds2)
+
+res<-results(dds2, name="Time90.AntibioticCOL", tidy=T)
+
+sig.res<-filter(res, padj < 0.05)
+
+res<-mutate(res, significant=ifelse(padj<0.05, 'significant', 'not significant'))
+ggplot(res, aes(x=log2FoldChange, y=-log10(padj), color=significant))+geom_point()

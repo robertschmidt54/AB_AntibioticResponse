@@ -1,0 +1,58 @@
+library(MatrixEQTL)
+library(tidyverse)
+
+useModel=modelLINEAR
+SNP_file_name <- "SNP_Matrix.txt"
+expression_file_name<-"DESeq2NormalizedCounts.txt"
+covariates_file_name<-"CovariateMatrix.txt"
+
+trans_alpha<-0.01
+cis_alpha<-0.02
+
+cisDist<-1e6
+
+snps<-SlicedData$new()
+snps$fileDelimiter = "\t"
+snps$fileOmitCharacters = "NA"
+snps$fileSkipRows = 1
+snps$fileSkipColumns = 1
+snps$fileSliceSize = 2000
+snps$LoadFile(SNP_file_name)
+
+gene<-SlicedData$new()
+gene$fileDelimiter="\t"
+gene$fileOmitCharacters = "NA"
+gene$fileSkipRows = 1
+gene$fileSkipColumns = 1
+gene$fileSliceSize = 2000
+gene$LoadFile(expression_file_name)
+
+covar<-SlicedData$new()
+covar$fileDelimiter="\t"
+covar$fileOmitCharacters = "NA"
+covar$fileSkipRows = 1
+covar$fileSkipColumns=1
+covar$fileSliceSize = 2000
+covar$LoadFile(covariates_file_name)
+
+snppos<-read.table("SNP_Posistions.txt", header=TRUE, stringsAsFactors = F)
+genepos<-read.table("Gene_Posistions.txt", header=T, stringsAsFactors=F)
+me = Matrix_eQTL_main(
+  snps=snps,
+  gene=gene,
+  cvrt=covar,
+  output_file_name = "TestEQTL_trans.txt",
+  pvOutputThreshold = trans_alpha,
+  useModel=useModel,
+  verbose=T,
+  output_file_name.cis="TestEQTL_cis.txt",
+  pvOutputThreshold.cis=cis_alpha,
+  snpspos=snppos,
+  genepos=genepos,
+  cisDist=cisDist,
+  pvalue.hist="qqplot",
+  min.pv.by.genesnp = F,
+  noFDRsaveMemory = F
+)
+
+plot(me)

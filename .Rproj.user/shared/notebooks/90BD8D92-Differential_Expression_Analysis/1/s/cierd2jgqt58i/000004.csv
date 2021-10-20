@@ -1,0 +1,17 @@
+"0","gffID_to_geneNames<-read_tsv(""../gffID_to_GeneID.txt"")"
+"1","[1m[1mRows: [1m[22m[34m[34m3765[34m[39m [1m[1mColumns: [1m[22m[34m[34m6[34m[39m
+"
+"1","[36m--[39m [1m[1mColumn specification[1m[22m [36m------------------------------------------[39m
+[1mDelimiter:[22m ""\t""
+[31mchr[39m (4): GeneID, GenedbRef, GeneName, Locus_tag
+[32mdbl[39m (2): Start, End
+"
+"1","
+[36mi[39m Use [38;5;251m[48;5;235m[38;5;251m[48;5;235m`spec()`[48;5;235m[38;5;251m[49m[39m to retrieve the full column specification for this data.
+[36mi[39m Specify the column types or set [38;5;251m[48;5;235m[38;5;251m[48;5;235m`show_col_types = FALSE`[48;5;235m[38;5;251m[49m[39m to quiet this message.
+"
+"0","names<-c(""CIP"", ""COL"", ""IMI"", ""MER"", ""MOX"", ""TOB"")"
+"0","DERes<-list(CIPSig, COLSig, IMISig, MERSig, MOXSig, TOBSig)%>%"
+"0","  map(inner_join, gffID_to_geneNames, by=c(""row""=""GeneID""))"
+"0",""
+"0","names(DERes)<-names"

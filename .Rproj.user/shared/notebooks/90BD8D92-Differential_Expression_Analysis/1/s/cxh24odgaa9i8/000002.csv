@@ -1,0 +1,6 @@
+"0","TOBRes<-results(dds2, contrast=c(0,1,0,0,0,0,0,0,0,0,0,0,0,1), tidy=T)"
+"0",""
+"0","TOBSig<-TOBRes%>%filter(padj < 0.05, abs(log2FoldChange) >= 1.5)"
+"0",""
+"0","write_tsv(TOBRes, ""../DESeq2Out/ByAntibioticResults/FullResults/MOX_FullResults.txt"")"
+"0","write_tsv(TOBSig, ""../DESeq2Out/ByAntibioticResults/SignificantResults/MOX_SigResults.txt"")"

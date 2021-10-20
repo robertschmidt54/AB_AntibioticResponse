@@ -1,0 +1,12 @@
+#Directories with files too big to upload to github
+
+data/*
+BowtieOut/*
+PicardOut/*
+RefGenome/*
+GATKOut/*
+GitAccessToken*
+*.Rproj
+*.RData
+*.Rhistory
+

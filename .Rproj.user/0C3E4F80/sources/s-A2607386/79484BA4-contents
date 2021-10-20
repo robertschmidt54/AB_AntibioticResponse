@@ -1,0 +1,302 @@
+---
+title: "Differential Expression Analysis"
+author: "Rob Schmidt"
+output: html_notebook
+---
+
+```{r setup}
+library(tidyverse)
+library(DESeq2)
+```
+
+
+```{r exploration, message=FALSE}
+sampleData<-read_tsv("../SampleTable.txt")%>%
+  mutate(Time=as.factor(Time), Antibiotic=as.factor(Antibiotic),
+         group=as.factor(paste(Antibiotic, Time, sep="_")))
+
+sampleData$Antibiotic<-relevel(sampleData$Antibiotic, ref="NDC")
+sampleData$group<-relevel(sampleData$group, ref="NDC_30")
+
+
+files<-list.files("../HTSeqOut/Gene_level/", full.names = T)
+
+ctMat<-map(files, read_tsv, col_names=c("GeneID", "Expression"))%>%
+  purrr::reduce(full_join, by="GeneID")%>%
+  filter(GeneID != "__no_feature",  GeneID != "__ambiguous", 
+         GeneID != "__too_low_aQual",  GeneID != "__not_aligned", 
+         GeneID != "__alignment_not_unique")%>%
+  column_to_rownames("GeneID")%>%
+  as.matrix()
+colnames(ctMat)<-sampleData$Run
+
+dds<-DESeqDataSetFromMatrix(ctMat, sampleData, design=~Time*Antibiotic)
+
+
+
+normCts<-counts(dds, normalized=F)%>%
+  rlog()
+
+normCts_long<-normCts%>%
+  as.data.frame()%>%
+  rownames_to_column("GeneID")%>%
+  pivot_longer(-GeneID, names_to="Sample", values_to="NormCounts")
+```
+
+```{r Figure1, caption="Figure 1: Distribution of rlog transformed counts by sample"}
+#Count distributions
+ggplot(normCts_long, aes(x=Sample, y=log10(NormCounts)))+
+  geom_boxplot()
+```
+```{r}
+ggplot(normCts_long, aes(x=log10(NormCounts+1e-7), fill=Sample))+
+  geom_density(alpha=0.1)+
+  theme(legend.position = "none")
+```
+
+```{r}
+#Count distributions look ok.
+
+#PCA
+
+pca<-prcomp(t(normCts))
+
+cumVar<-pca$sdev^2/sum(pca$sdev^2)*100
+
+pcaPlotDat<-pca$x%>%
+  as.data.frame()%>%
+  rownames_to_column("Run")%>%
+  inner_join(sampleData, by="Run")
+
+ggplot(pcaPlotDat, aes(x=PC1, y=PC2, shape=Time, color=Antibiotic))+
+  geom_point()+
+  labs(x=paste("PC1", paste0("[", paste0(as.character(round(cumVar[1], 2)), "%"),"]"), sep=" "), y=paste("PC2", paste0("[", paste0(as.character(round(cumVar[2], 2)), "%"),"]"), sep=" "))+
+  theme_classic() #Time looks to be dominate difference. Antibiotic does differ, but not as much as time. Rockstar antibiotics seem to be TOB, CIP, MER, COL as these seperate fairly well.
+```
+
+
+
+
+```{r ModelFitting}
+
+#Check simpler model
+dds2<-DESeq(dds, test="LRT", reduced=~Antibiotic+Time)
+
+res<-results(dds2, tidy=T)%>%
+  filter(padj < 0.05)
+
+#1119 genes out of 3764 genes have a greater increase in the log liklihood than would be expected if the interaction term was 0. That's about 30% of the observed genes that the full model may fit better to. Therefore I will continue with the full model. 
+
+```
+
+```{r resultsSummary}
+dds2<-DESeq(dds)
+```
+
+```{r}
+plotDispEsts(dds2) #Fit is good with high mean counts. > 0.5?
+```
+
+
+##Cip Results
+```{r}
+resultsNames(dds2)
+#genes changing with CIP adjusted for NDC should be (CIP90-NDC90)-(CIP30-NDC30)+(NDC90-NDC30) = CIP90 - CIP30
+#Ought to be just the interaction term for CIP plus the time term.
+
+CIPRes<-results(dds2, contrast=c(0,1,0,0,0,0,0,0,1,0,0,0,0,0), tidy=T)
+
+CIPSig<-CIPRes%>%filter(padj < 0.05, abs(log2FoldChange) >= 1.5)
+
+write_tsv(CIPRes, "../DESeq2Out/ByAntibioticResults/FullResults/CIP_FullResults.txt")
+write_tsv(CIPSig, "../DESeq2Out/ByAntibioticResults/SignificantResults/CIP_SigResults.txt")
+```
+```{r}
+#pvals
+ggplot(CIPRes, aes(x=pvalue))+geom_histogram()+
+  scale_y_discrete(expand=c(0,0))+
+  theme_classic()
+```
+```{r}
+#volcano plot
+CIPResVPlot<-CIPRes%>%
+  mutate(Significance=ifelse(padj<0.05 & abs(log2FoldChange) >= 1.5, "Significant", "Not Significant"), alpha=ifelse(Significance == "Not Significant", 0.1, 1))%>%
+  filter(!is.na(padj))
+ggplot(CIPResVPlot, aes(x=log2FoldChange, y=-log10(padj), color=Significance, alpha=alpha))+
+  geom_point()+
+  scale_color_manual(values=c("black", "red"))+
+  labs(title="CIP", x="Log2 Fold Change", y="-log10(adjusted p-value)")+
+  theme_classic()+
+  theme(legend.position = "none")
+```
+
+In total there are 368 genes that significantly differ between incubation with CIP for 90 mins incubation vs CIP for 30 min. Significane is defined as having a BH adjusted p value less than 0.05 and the absolute value of the log2 fold change is greater than 1.5.
+
+##COL Analysis
+```{r, COLAnalysis}
+COLRes<-results(dds2, contrast=c(0,1,0,0,0,0,0,0,0,1,0,0,0,0), tidy=T)
+
+COLSig<-COLRes%>%filter(padj < 0.05, abs(log2FoldChange) >= 1.5)
+
+write_tsv(COLRes, "../DESeq2Out/ByAntibioticResults/FullResults/COL_FullResults.txt")
+write_tsv(COLSig, "../DESeq2Out/ByAntibioticResults/SignificantResults/COL_SigResults.txt")
+```
+
+```{r}
+#pvals
+ggplot(COLRes, aes(x=pvalue))+geom_histogram()+
+  scale_y_discrete(expand=c(0,0))+
+  theme_classic()
+```
+
+```{r}
+#volcano plot
+COLResVPlot<-COLRes%>%
+  mutate(Significance=ifelse(padj<0.05 & abs(log2FoldChange) >= 1.5, "Significant", "Not Significant"), alpha=ifelse(Significance == "Not Significant", 0.1, 1))%>%
+  filter(!is.na(padj))
+ggplot(COLResVPlot, aes(x=log2FoldChange, y=-log10(padj), color=Significance, alpha=alpha))+
+  geom_point()+
+  scale_color_manual(values=c("black", "red"))+
+  labs(title="COL", x="Log2 Fold Change", y="-log10(adjusted p-value)")+
+  theme_classic()+
+  theme(legend.position = "none")
+```
+
+There are a total of 40 genes that are DE with colsitin.
+
+##IMI Analysis
+
+```{r}
+IMIRes<-results(dds2, contrast=c(0,1,0,0,0,0,0,0,0,0,1,0,0,0), tidy=T)
+
+IMISig<-IMIRes%>%filter(padj < 0.05, abs(log2FoldChange) >= 1.5)
+
+write_tsv(IMIRes, "../DESeq2Out/ByAntibioticResults/FullResults/IMI_FullResults.txt")
+write_tsv(IMISig, "../DESeq2Out/ByAntibioticResults/SignificantResults/IMI_SigResults.txt")
+```
+
+```{r}
+#pvals
+ggplot(IMIRes, aes(x=pvalue))+geom_histogram()+
+  scale_y_discrete(expand=c(0,0))+
+  theme_classic()
+```
+
+```{r}
+#volcano plot
+IMIResVPlot<-IMIRes%>%
+  mutate(Significance=ifelse(padj<0.05 & abs(log2FoldChange) >= 1.5, "Significant", "Not Significant"), alpha=ifelse(Significance == "Not Significant", 0.1, 1))%>%
+  filter(!is.na(padj))
+ggplot(IMIResVPlot, aes(x=log2FoldChange, y=-log10(padj), color=Significance, alpha=alpha))+
+  geom_point()+
+  scale_color_manual(values=c("black", "red"))+
+  labs(title="IMI", x="Log2 Fold Change", y="-log10(adjusted p-value)")+
+  theme_classic()+
+  theme(legend.position = "none")
+```
+
+##MER Analysis
+
+```{r}
+MERRes<-results(dds2, contrast=c(0,1,0,0,0,0,0,0,0,0,0,1,0,0), tidy=T)
+
+MERSig<-MERRes%>%filter(padj < 0.05, abs(log2FoldChange) >= 1.5)
+
+write_tsv(MERRes, "../DESeq2Out/ByAntibioticResults/FullResults/MER_FullResults.txt")
+write_tsv(MERSig, "../DESeq2Out/ByAntibioticResults/SignificantResults/MER_SigResults.txt")
+```
+
+```{r}
+#pvals
+ggplot(MERRes, aes(x=pvalue))+geom_histogram()+
+  scale_y_discrete(expand=c(0,0))+
+  theme_classic()
+```
+
+```{r}
+#volcano plot
+MERResVPlot<-MERRes%>%
+  mutate(Significance=ifelse(padj<0.05 & abs(log2FoldChange) >= 1.5, "Significant", "Not Significant"), alpha=ifelse(Significance == "Not Significant", 0.1, 1))%>%
+  filter(!is.na(padj))
+ggplot(MERResVPlot, aes(x=log2FoldChange, y=-log10(padj), color=Significance, alpha=alpha))+
+  geom_point()+
+  scale_color_manual(values=c("black", "red"))+
+  labs(title="MER", x="Log2 Fold Change", y="-log10(adjusted p-value)")+
+  theme_classic()+
+  theme(legend.position = "none")
+```
+
+##MOX Analysis
+
+```{r}
+MOXRes<-results(dds2, contrast=c(0,1,0,0,0,0,0,0,0,0,0,0,1,0), tidy=T)
+
+MOXSig<-MOXRes%>%filter(padj < 0.05, abs(log2FoldChange) >= 1.5)
+
+write_tsv(MOXRes, "../DESeq2Out/ByAntibioticResults/FullResults/MOX_FullResults.txt")
+write_tsv(MOXSig, "../DESeq2Out/ByAntibioticResults/SignificantResults/MOX_SigResults.txt")
+```
+
+```{r}
+#pvals
+ggplot(MOXRes, aes(x=pvalue))+geom_histogram()+
+  scale_y_discrete(expand=c(0,0))+
+  theme_classic()
+```
+
+```{r}
+#volcano plot
+MOXResVPlot<-MOXRes%>%
+  mutate(Significance=ifelse(padj<0.05 & abs(log2FoldChange) >= 1.5, "Significant", "Not Significant"), alpha=ifelse(Significance == "Not Significant", 0.1, 1))%>%
+  filter(!is.na(padj))
+ggplot(MOXResVPlot, aes(x=log2FoldChange, y=-log10(padj), color=Significance, alpha=alpha))+
+  geom_point()+
+  scale_color_manual(values=c("black", "red"))+
+  labs(title="MOX", x="Log2 Fold Change", y="-log10(adjusted p-value)")+
+  theme_classic()+
+  theme(legend.position = "none")
+```
+
+##TOB Analysis
+
+```{r}
+TOBRes<-results(dds2, contrast=c(0,1,0,0,0,0,0,0,0,0,0,0,0,1), tidy=T)
+
+TOBSig<-TOBRes%>%filter(padj < 0.05, abs(log2FoldChange) >= 1.5)
+
+write_tsv(TOBRes, "../DESeq2Out/ByAntibioticResults/FullResults/MOX_FullResults.txt")
+write_tsv(TOBSig, "../DESeq2Out/ByAntibioticResults/SignificantResults/MOX_SigResults.txt")
+```
+
+```{r}
+#pvals
+ggplot(TOBRes, aes(x=pvalue))+geom_histogram()+
+  scale_y_discrete(expand=c(0,0))+
+  theme_classic()
+```
+
+```{r}
+#volcano plot
+TOBResVPlot<-TOBRes%>%
+  mutate(Significance=ifelse(padj<0.05 & abs(log2FoldChange) >= 1.5, "Significant", "Not Significant"), alpha=ifelse(Significance == "Not Significant", 0.1, 1))%>%
+  filter(!is.na(padj))
+ggplot(TOBResVPlot, aes(x=log2FoldChange, y=-log10(padj), color=Significance, alpha=alpha))+
+  geom_point()+
+  scale_color_manual(values=c("black", "red"))+
+  labs(title="TOB", x="Log2 Fold Change", y="-log10(adjusted p-value)")+
+  theme_classic()+
+  theme(legend.position = "none")
+```
+```{r DESummaryTable}
+
+```
+
+```{r Annotation}
+gffID_to_geneNames<-read_tsv("../gffID_to_GeneID.txt")
+
+names<-c("CIP", "COL", "IMI", "MER", "MOX", "TOB")
+DERes<-list(CIPSig, COLSig, IMISig, MERSig, MOXSig, TOBSig)%>%
+  map(inner_join, gffID_to_geneNames, by=c("row"="GeneID"))
+
+names(DERes)<-names
+```
